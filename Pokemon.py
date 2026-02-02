@@ -14,6 +14,10 @@ p2Elo = logList[1][-4:]
 
 # PARSE ARRAY, FIND FIRST ENTRY INCLUDING "|player|p1" TO FIND PLAYER NAME AND ELO
 
+#for i in logList:
+ #   if i 
+#p1 = logList.index("|player|p1")
+#p2 = logList.index("|player|p2")
 
 pokeNames1 = []
 pokeNames2 = []
@@ -42,7 +46,7 @@ for i in range(len(pokeNames1)):
     pokeNames1[i] = pokeNames1[i][0:seperator]
 
 #player1 = Player(p1, )
-print(p1Elo)
+print(p1)
 print("\n")
-print(p2Elo)
+print(p2)
 
