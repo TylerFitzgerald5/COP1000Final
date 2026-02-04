@@ -1,5 +1,5 @@
 import requests
-import Player
+import Player as ply
 import Util
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
@@ -28,7 +28,7 @@ pokeNames1 = []
 pokeNames2 = []
 
 
-
+#Finds pokemon and assigns them to the correct player
 for i in logList:
     if(i[0:8] == "|poke|p1"):
         pokeNames1.append(i[9:])
@@ -37,7 +37,8 @@ for i in logList:
     if(i[0:8] == "|poke|p2"):
         pokeNames2.append(i[9:])
 
-#Gets rid of pokemon genders and converts pokeName2 to only their names
+
+#Gets rid of pokemon genders and converts pokeName1/2 to only their names
 for i in range(len(pokeNames2)):
     seperator = pokeNames2[i].find(',')
     if seperator == -1:
@@ -50,8 +51,9 @@ for i in range(len(pokeNames1)):
         seperator = pokeNames1[i].find('|')
     pokeNames1[i] = pokeNames1[i][0:seperator]
 
-#player1 = Player(p1, )
-print(p1Elo)
+player1 = ply.Player(p1, pokeNames1, p1Elo)
+player2 = ply.Player(p2, pokeNames2, p2Elo)
+print(player1)
 print("\n")
-print(p2Elo)
+print(player2)
 
