@@ -1,5 +1,6 @@
 import requests
 import Player
+import Util
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
 URL = "https://replay.pokemonshowdown.com/gen9ou-2526545993"
@@ -7,17 +8,21 @@ log = requests.get(URL + ".log").text
 
 logList = log.split("\n")
 
-p1 = logList[0][4:]
-p1Elo = logList[0][-4:]
-p2 = logList[1][4:]
-p2Elo = logList[1][-4:]
+#initialize both player variables and variables to store ELO
+p1, p2 = "Null", "Null"
+p1Elo, p2Elo = -1, -1
 
 # PARSE ARRAY, FIND FIRST ENTRY INCLUDING "|player|p1" TO FIND PLAYER NAME AND ELO
 
-#for i in logList:
- #   if i 
-#p1 = logList.index("|player|p1")
-#p2 = logList.index("|player|p2")
+for i in logList:
+    if i.find("|player|p1") != -1:
+        p1 = Util.PCutAfter(i, 3)
+        p1 = Util.PCutBefore(p1)
+        p1Elo = int(i[-4:])
+    elif i.find("|player|p2") != -1:
+        p2 = Util.PCutAfter(i, 3)
+        p2 = Util.PCutBefore(p2)
+        p2Elo = int(i[-4:])
 
 pokeNames1 = []
 pokeNames2 = []
@@ -46,7 +51,7 @@ for i in range(len(pokeNames1)):
     pokeNames1[i] = pokeNames1[i][0:seperator]
 
 #player1 = Player(p1, )
-print(p1)
+print(p1Elo)
 print("\n")
-print(p2)
+print(p2Elo)
 
