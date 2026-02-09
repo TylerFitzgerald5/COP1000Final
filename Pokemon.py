@@ -2,8 +2,15 @@ import requests
 import Player as ply
 import Util
 
+
+
 #URL = input("Please input a Pokemon Showdown replay link: ")
 URL = "https://replay.pokemonshowdown.com/gen9ou-2526545993"
+
+
+index = URL.find(".com") + 5
+matchID = URL[index:]
+
 log = requests.get(URL + ".log").text
 
 logList = log.split("\n")
@@ -53,7 +60,24 @@ for i in range(len(pokeNames1)):
 
 player1 = ply.Player(p1, pokeNames1, p1Elo)
 player2 = ply.Player(p2, pokeNames2, p2Elo)
-print(player1)
+
+
+
+
+
+
+
+
+
+
+##----------------##
+##SQLITE3 DATABASE##
+##----------------##
+Util.create_connection("database.db")
+
+
+
+print(matchID)
 print("\n")
 print(player2)
 
