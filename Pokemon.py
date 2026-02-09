@@ -1,8 +1,8 @@
 import requests
 import Player as ply
 import Util
-
-
+import sqlite3
+from sqlite3 import Error
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
 URL = "https://replay.pokemonshowdown.com/gen9ou-2526545993"
@@ -58,8 +58,19 @@ for i in range(len(pokeNames1)):
         seperator = pokeNames1[i].find('|')
     pokeNames1[i] = pokeNames1[i][0:seperator]
 
-player1 = ply.Player(p1, pokeNames1, p1Elo)
-player2 = ply.Player(p2, pokeNames2, p2Elo)
+
+### CREATING THE PLAYERS
+player1 = {
+    "name" : p1,
+    "team" : pokeNames1,
+    "elo" : p1Elo
+}
+
+player2 = {
+    "name" : p2,
+    "team" : pokeNames2,
+    "elo" : p2Elo
+}
 
 
 
@@ -73,9 +84,30 @@ player2 = ply.Player(p2, pokeNames2, p2Elo)
 ##----------------##
 ##SQLITE3 DATABASE##
 ##----------------##
-Util.create_connection("database.db")
+def connection_create(path):
+    coonection = None
+    try:
+        connection = sqlite3.connect(path)
+        print("Connected to Database")
+    except Error as e:
+        print("The error " + e + " occured")
+    
+    return connection
 
 
+
+connection = connection_create("database.db")
+cursor = connection.cursor()
+
+
+try:
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS 
+                   
+                   """)
+
+except Error as e:
+    print("The error " + e + " occured")
 
 print(matchID)
 print("\n")
