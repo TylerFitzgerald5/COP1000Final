@@ -1,5 +1,5 @@
 import requests
-import Player as ply
+#import Player as ply
 import Util
 import sqlite3
 from sqlite3 import Error
@@ -43,7 +43,10 @@ for i in logList:
 
     if(i[0:8] == "|poke|p2"):
         pokeNames2.append(i[9:])
-
+    
+    if(i[0:5] == "|win|"):
+        winnerName = i[5:]
+        print("Winner Name = " + winnerName)
 
 #Gets rid of pokemon genders and converts pokeName1/2 to only their names
 for i in range(len(pokeNames2)):
@@ -57,8 +60,8 @@ for i in range(len(pokeNames1)):
     if seperator == -1:
         seperator = pokeNames1[i].find('|')
     pokeNames1[i] = pokeNames1[i][0:seperator]
-
-
+"""
+###
 ### CREATING THE PLAYERS
 player1 = {
     "name" : p1,
@@ -74,6 +77,7 @@ player2 = {
 
 
 
+"""
 
 
 
@@ -100,16 +104,64 @@ connection = connection_create("database.db")
 cursor = connection.cursor()
 
 
+
+
 try:
     cursor.execute("""
-CREATE TABLE IF NOT EXISTS 
+CREATE TABLE IF NOT EXISTS players(
+                   username TEXT PRIMARY KEY,
+                   wins INTEGER NOT NULL,
+                   loses INTEGER NOT NULL,
+                   games_played INTEGER NOT NULL,
+                   current_elo INTEGER NOT NULL
+                   )
                    
                    """)
+    connection.commit()
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS games(
+                   player1_name TEXT NOT NULL,
+                   player2_name TEXT NOT NULL,
+                   player1_team TEXT NOT NULL,
+                   player2_team TEXT NOT NULL,
+                   player1_elo INTEGER NOT NULL,
+                   player2_elo INTEGER NOT NULL,
+                   winner_name TEXT NOT NULL,
+                   match_id TEXT PRIMARY KEY
+                   )
+                   """)
+    connection.commit()
 
 except Error as e:
     print("The error " + e + " occured")
+    print("Database Creation")
 
-print(matchID)
-print("\n")
-print(player2)
+
+
+
+
+try:
+    pokeNames1 = str(pokeNames1)
+    pokeNames2 = str(pokeNames2)
+
+    cursor.execute("""
+INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, match_id)
+                   VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+                   """, (p1, p2, pokeNames1, pokeNames2, p1Elo, p2Elo, winnerName, matchID))
+    print("INSERT executed")
+except Error as e:
+    print("The error " + e + " occured")
+    print("Match Create")
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -2,7 +2,6 @@
 ##They are for altering string values to extract important information from lines
 
 
-
 #Pipe cuts and returns everything after the pipe
 #Can be called multiple times using reps. Defaults to 1
 def PCutAfter(input, reps = 1):
@@ -16,3 +15,7 @@ def PCutAfter(input, reps = 1):
 def PCutBefore(input):
     index = input.find("|")
     return input[:index]
+
+
+#Creates a connection to the database being used
+
