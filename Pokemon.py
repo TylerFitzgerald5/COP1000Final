@@ -139,19 +139,45 @@ except Error as e:
 
 
 
-
+#TRY-EXCEPT tries to add the current match into the games table
 try:
     pokeNames1 = str(pokeNames1)
     pokeNames2 = str(pokeNames2)
+    
+    Sql = ''' INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, match_id) 
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?) '''
+    cursor.execute(Sql, (p1, p2, pokeNames1, pokeNames2, p1Elo, p2Elo, winnerName, matchID))
+    
+    connection.commit()
 
-    cursor.execute("""
-INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, match_id)
-                   VALUES(?, ?, ?, ?, ?, ?, ?, ?)
-                   """, (p1, p2, pokeNames1, pokeNames2, p1Elo, p2Elo, winnerName, matchID))
     print("INSERT executed")
 except Error as e:
-    print("The error " + e + " occured")
-    print("Match Create")
+    if(str(e) == "UNIQUE constraint failed: games.match_id"):
+        print(matchID + ": MATCH ALREADY IN THE DATABASE")
+    else: 
+        print(e)
+#TRY-EXCEPT tries to add the current match into the games table
+
+
+
+#TRY-EXCEPT Tries to add the the players to the database if they don't already exist. Also updates the win/loss counter
+try:    
+    Sql = '''SELECT username FROM players'''
+    cursor.execute(Sql)
+
+    addedPlayer1 = False
+    addedPlayer2 = False
+    for i in cursor.fetchall():
+        if i == p1:
+            cursor.execute("UPDATE WHERE username = VALUES(?)", i)
+            
+    #if(cursor.fetchall() != []):
+    #    print("FETCHALL IS NOT []")
+    print(cursor.fetchall())
+    cursor.execute(''' INSERT INTO players
+                   ''')
+except Error as e:
+    print(e)
 
 
 
