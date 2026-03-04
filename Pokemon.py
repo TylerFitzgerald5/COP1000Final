@@ -5,7 +5,7 @@ import sqlite3
 from sqlite3 import Error
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
-URL = "https://replay.pokemonshowdown.com/gen9ou-2526545993"
+URL = "https://replay.pokemonshowdown.com/doublesou-232753081"
 
 
 index = URL.find(".com") + 5
@@ -20,16 +20,26 @@ p1, p2 = "Null", "Null"
 p1Elo, p2Elo = -1, -1
 
 # PARSE ARRAY, FIND FIRST ENTRY INCLUDING "|player|p1" TO FIND PLAYER NAME AND ELO
+p1Found = False
+p2Found = False
 
 for i in logList:
-    if i.find("|player|p1") != -1:
+    if not p1Found and i.find("|player|p1") != -1:
+        print(i)
+        p1Elo = int(Util.PCutAfter(i, 4))
         p1 = Util.PCutAfter(i, 3)
         p1 = Util.PCutBefore(p1)
-        p1Elo = int(i[-4:])
-    elif i.find("|player|p2") != -1:
+        p1Found = True
+
+    elif not p2Found and i.find("|player|p2") != -1:
+        print(i)
+        p2Elo = int(Util.PCutAfter(i, 4))
         p2 = Util.PCutAfter(i, 3)
         p2 = Util.PCutBefore(p2)
-        p2Elo = int(i[-4:])
+        p2Found = True
+        
+    elif p1Found and p2Found:
+        break
 
 pokeNames1 = []
 pokeNames2 = []
@@ -60,24 +70,7 @@ for i in range(len(pokeNames1)):
     if seperator == -1:
         seperator = pokeNames1[i].find('|')
     pokeNames1[i] = pokeNames1[i][0:seperator]
-"""
-###
-### CREATING THE PLAYERS
-player1 = {
-    "name" : p1,
-    "team" : pokeNames1,
-    "elo" : p1Elo
-}
 
-player2 = {
-    "name" : p2,
-    "team" : pokeNames2,
-    "elo" : p2Elo
-}
-
-
-
-"""
 
 
 
@@ -165,17 +158,40 @@ try:
     Sql = '''SELECT username FROM players'''
     cursor.execute(Sql)
 
-    addedPlayer1 = False
-    addedPlayer2 = False
+    NeedToAddP1 = True
+    NeedToAddP2 = True
     for i in cursor.fetchall():
-        if i == p1:
-            cursor.execute("UPDATE WHERE username = VALUES(?)", i)
+        if i == p1 or i == p2:
+            if i == winnerName and i == p1:
+                
+                cursor.execute("UPDATE players SET wins = wins + 1, games_played = games_played + 1, current_elo = ? WHERE username = ?", p1Elo, i)
+                NeedtoAddP1 = False
+            elif i == winnerName and i == p2:
+                cursor.execute("UPDATE players SET wins = wins + 1, games_played = games_played + 1, current_elo = ? WHERE username = ?", p2Elo, i)
+                NeedToAddP2 = False
+            elif i == p1: #IF i == p1, but not "i == p1 and i = winnerName" then p1 is the loser
+                cursor.execute("UPDATE players SET loses = loses + 1, games_played = games_played + 1, current_elo = ? WHERE username = ?", p1Elo, i)
+                NeedtoAddP1 = False
+            elif i == p2: #IF i == p2, but not "i == p2 and i = winnerName" then p2 is the loser
+                cursor.execute("UPDATE players SET loses = loses + 1, games_played = games_played + 1, current_elo = ? WHERE username = ?", p2Elo, i)
+                NeedToAddP2 = False
+            else:
+                print(i + " is not a current player in the match")
             
-    #if(cursor.fetchall() != []):
-    #    print("FETCHALL IS NOT []")
-    print(cursor.fetchall())
-    cursor.execute(''' INSERT INTO players
-                   ''')
+    if NeedToAddP1 and p1 == winnerName:
+        cursor.execute("INSERT INTO players(username, wins, loses, games_played, current_elo) VALUES(?,?,?,?,?)", (p1, 1, 0, 1, p1Elo))
+    elif NeedToAddP1:
+        cursor.execute("INSERT INTO players(username, wins, loses, games_played, current_elo) VALUES(?,?,?,?,?)", (p1, 0, 1, 1, p1Elo))
+
+
+    if NeedToAddP2 and p2 == winnerName:
+        cursor.execute("INSERT INTO players(username, wins, loses, games_played, current_elo) VALUES(?,?,?,?,?)", (p2, 1, 0, 1, p2Elo))
+    elif NeedToAddP2:
+        cursor.execute("INSERT INTO players(username, wins, loses, games_played, current_elo) VALUES(?,?,?,?,?)", (p2, 0, 1, 1, p2Elo))
+
+
+    connection.commit()
+
 except Error as e:
     print(e)
 
