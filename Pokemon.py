@@ -1,11 +1,31 @@
 import requests
-#import Player as ply
+
 import Util
 import sqlite3
 from sqlite3 import Error
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
-URL = "https://replay.pokemonshowdown.com/doublesou-232753081"
+URL = "https://replay.pokemonshowdown.com/gen4ou-2555106657"
+
+'''
+Tentative Testing
+Ladders:
+Gen 9 ou
+Gen 8 ou
+Gen 7 ou
+Gen 6 ou
+Gen 5 ou
+Gen 4 ou - Does not gather team data
+
+
+
+'''
+
+
+
+
+
+
 
 
 index = URL.find(".com") + 5
@@ -26,14 +46,37 @@ p2Found = False
 for i in logList:
     if not p1Found and i.find("|player|p1") != -1:
         print(i)
-        p1Elo = int(Util.PCutAfter(i, 4))
+        try:
+            p1Elo = int(i[-5:])
+        except:
+            try:
+                p1Elo = int(i[-4:])
+            except:
+                try:
+                    p1Elo = int(i[-3:])
+                except:
+                    print(i + " DID NOT FIND ELO")
+                    p1Elo = None
+
+
+
         p1 = Util.PCutAfter(i, 3)
         p1 = Util.PCutBefore(p1)
         p1Found = True
 
     elif not p2Found and i.find("|player|p2") != -1:
         print(i)
-        p2Elo = int(Util.PCutAfter(i, 4))
+        try:
+            p2Elo = int(i[-5:])
+        except:
+            try:
+                p2Elo = int(i[-4:])
+            except:
+                try:
+                    p2Elo = int(i[-3:])
+                except:
+                    print(i + " DID NOT FIND ELO")
+                    p2Elo = None
         p2 = Util.PCutAfter(i, 3)
         p2 = Util.PCutBefore(p2)
         p2Found = True
@@ -106,7 +149,7 @@ CREATE TABLE IF NOT EXISTS players(
                    wins INTEGER NOT NULL,
                    loses INTEGER NOT NULL,
                    games_played INTEGER NOT NULL,
-                   current_elo INTEGER NOT NULL
+                   current_elo INTEGER
                    )
                    
                    """)
@@ -117,8 +160,8 @@ CREATE TABLE IF NOT EXISTS games(
                    player2_name TEXT NOT NULL,
                    player1_team TEXT NOT NULL,
                    player2_team TEXT NOT NULL,
-                   player1_elo INTEGER NOT NULL,
-                   player2_elo INTEGER NOT NULL,
+                   player1_elo INTEGER,
+                   player2_elo INTEGER,
                    winner_name TEXT NOT NULL,
                    match_id TEXT PRIMARY KEY
                    )
