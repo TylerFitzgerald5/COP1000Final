@@ -125,7 +125,7 @@ for i in range(len(pokeNames1)):
 ##SQLITE3 DATABASE##
 ##----------------##
 def connection_create(path):
-    coonection = None
+    connection = None
     try:
         connection = sqlite3.connect(path)
         print("Connected to Database")

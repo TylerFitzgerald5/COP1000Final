@@ -26,7 +26,17 @@ def userSearch(username):
     sql = "SELECT * FROM players WHERE username = ?"
     nameTuple = (username,)
     cursor.execute(sql, nameTuple)
-    print(cursor.fetchall())
+    user = cursor.fetchone()
+    if user == None:
+        print("\n\n\n\n")
+        print("That user does not exist in the database. Please ensure name is correct and capitalized correctly.")
+    else:
+        print("\n\n\n\n")
+        print("User: " + user[0])
+        print("wins: "+ str(user[1]))
+        print("loses: " + str(user[2]))
+        print("Games Played: " + str(user[3]))
+        print("Current ELO: " + str(user[4]))
 
 
 
