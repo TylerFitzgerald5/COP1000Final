@@ -5,7 +5,7 @@ import sqlite3
 from sqlite3 import Error
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
-URL = "https://replay.pokemonshowdown.com/gen4ou-2555106657"
+URL = "https://replay.pokemonshowdown.com/gen9vgc2026regf-2556642944"
 
 '''
 Tentative Testing
@@ -100,6 +100,10 @@ for i in logList:
     if(i[0:5] == "|win|"):
         winnerName = i[5:]
         print("Winner Name = " + winnerName)
+    if(i[0:6] == "|tier|"):
+        tier = i[6:]
+        print("Current tier: " + tier)
+
 
 #Gets rid of pokemon genders and converts pokeName1/2 to only their names
 for i in range(len(pokeNames2)):
@@ -163,6 +167,7 @@ CREATE TABLE IF NOT EXISTS games(
                    player1_elo INTEGER,
                    player2_elo INTEGER,
                    winner_name TEXT NOT NULL,
+                   tier TEXT NOT NULL,
                    match_id TEXT PRIMARY KEY
                    )
                    """)
@@ -180,9 +185,9 @@ try:
     pokeNames1 = str(pokeNames1)
     pokeNames2 = str(pokeNames2)
     
-    Sql = ''' INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, match_id) 
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?) '''
-    cursor.execute(Sql, (p1, p2, pokeNames1, pokeNames2, p1Elo, p2Elo, winnerName, matchID))
+    Sql = ''' INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, tier, match_id) 
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) '''
+    cursor.execute(Sql, (p1, p2, pokeNames1, pokeNames2, p1Elo, p2Elo, winnerName, tier, matchID))
     
     connection.commit()
 
