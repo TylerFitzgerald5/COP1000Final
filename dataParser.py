@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-
+import json
 
 
 
@@ -37,8 +37,40 @@ def userSearch(username):
         print("loses: " + str(user[2]))
         print("Games Played: " + str(user[3]))
         print("Current ELO: " + str(user[4]))
+    
 
 
+
+
+def usageRate(pokemon):
+    sql = "SELECT player1_team, player2_team FROM games"
+    cursor.execute(sql)
+
+    SQLlist = cursor.fetchall()
+
+    pokeUsed = 0
+    pokeTotal = 0
+
+    for poketeam in SQLlist:
+
+        pokelist = poketeam[0].split("|")
+        pokelist2 = poketeam[1].split("|")
+
+        pokelist.extend(pokelist2)
+        
+        print(pokelist)
+        for i in pokelist:
+            if pokemon.lower() == i.lower():
+                pokeUsed += 1
+            pokeTotal += 1
+        print(pokeTotal)
+        print(pokeUsed)
+
+
+        
+################BUG################
+#When printing pokemon without genders, the last letter gets cut off? Mew != Me
+###################################
 
 
 def Search():
@@ -55,6 +87,7 @@ def Search():
             userSearch(name)
         case "2":
             print("You entered 2")
+            usageRate("Clodsire")
         case "3":
             print("You entered 3")
         case _:
