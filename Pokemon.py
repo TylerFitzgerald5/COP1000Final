@@ -5,7 +5,7 @@ import sqlite3
 from sqlite3 import Error
 
 #URL = input("Please input a Pokemon Showdown replay link: ")
-URL = "https://replay.pokemonshowdown.com/gen9vgc2026regf-2556642944"
+URL = "https://replay.pokemonshowdown.com/uberssuspecttest-147833524"
 
 '''
 Tentative Testing
@@ -182,8 +182,8 @@ except Error as e:
 
 #TRY-EXCEPT tries to add the current match into the games table
 try:
-    pokeNames1 = str(pokeNames1)
-    pokeNames2 = str(pokeNames2)
+    pokeNames1 = '|'.join(pokeNames1)
+    pokeNames2 = '|'.join(pokeNames2)
     
     Sql = ''' INSERT INTO games(player1_name, player2_name, player1_team, player2_team, player1_elo, player2_elo, winner_name, tier, match_id) 
     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) '''
