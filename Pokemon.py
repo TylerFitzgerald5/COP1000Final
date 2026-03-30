@@ -4,8 +4,8 @@ import Util
 import sqlite3
 from sqlite3 import Error
 
-#URL = input("Please input a Pokemon Showdown replay link: ")
-URL = "https://replay.pokemonshowdown.com/uberssuspecttest-147833524"
+URL = input("Please input a Pokemon Showdown replay link: ")
+
 
 '''
 Tentative Testing
@@ -110,12 +110,18 @@ print(pokeNames2)
 for i in range(len(pokeNames2)):
 
     seperator = pokeNames2[i].find(',')
+    if seperator == -1:
+        seperator = pokeNames2[i].find('|')
+
     if seperator != -1:
         pokeNames2[i] = pokeNames2[i][0:seperator]
 print(pokeNames2) 
 print(pokeNames1)
 for i in range(len(pokeNames1)):
     seperator = pokeNames1[i].find(',')
+    if seperator == -1:
+        seperator = pokeNames1[i].find('|')
+
     if seperator != -1:
         pokeNames1[i] = pokeNames1[i][0:seperator]
 print(pokeNames1)  
