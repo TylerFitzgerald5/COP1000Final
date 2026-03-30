@@ -14,7 +14,7 @@ path = "database.db"
 connection = None
 try:
     connection = sqlite3.connect(path)
-    print("Connected to Database")
+
 except Error as e:
     print("The error " + e + " occured")
 
@@ -22,11 +22,17 @@ cursor = connection.cursor()
 
 tierSQL = "SELECT DISTINCT tier FROM games"
 cursor.execute(tierSQL)
-print("The tiers present in the database are: ")
+print("\n\nThe tiers present in the database are: ")
 for i in cursor:
-    print(i)
+    print(i[0]) #Cursor is a list of single element tuples
+print("\n\n")
+
+cursor.close()
+
+
 
 def userSearch(username):
+    cursor  = connection.cursor()
     sql = "SELECT * FROM players WHERE username = ?"
     nameTuple = (username,)
     cursor.execute(sql, nameTuple)
@@ -41,12 +47,13 @@ def userSearch(username):
         print("loses: " + str(user[2]))
         print("Games Played: " + str(user[3]))
         print("Current ELO: " + str(user[4]))
-    
+    cursor.close()
 
 
 
 
 def usageRate(pokemon, tier):
+    cursor = connection.cursor()
     sql = "SELECT player1_team, player2_team FROM games"
     cursor.execute(sql)
 
@@ -69,10 +76,28 @@ def usageRate(pokemon, tier):
             pokeTotal += 1
         print(pokeTotal)
         print(pokeUsed)
+    cursor.close()
 
-def topUsageList():
-    pass
+def topUsageList(tier):
+    cursor = connection.cursor()
+    SQL = "SELECT player1_team, player2_team FROM games WHERE tier = ?"
+    cursor.execute(SQL, str(tier))
+    
+    SQLlist = cursor.fetchall()
+    PokeUsage = {} 
+    for poketeam in SQLlist:
+
+        pokelist = poketeam[0].split("|")
+        pokelist2 = poketeam[1].split("|")
+
+        pokelist.extend(pokelist2)
+        for i in pokelist:
+            print(i)
+    cursor.close()
         
+
+
+
 ################BUG################
 #When printing pokemon without genders, the last letter gets cut off? Mew != Me
 ###################################
@@ -98,7 +123,7 @@ def Search():
         case "3":
             print("You entered 3")
             tier = input("Please enter a tier: ")
-
+            topUsageList(tier)
 
         case _:
             print("Please input a valid number")
