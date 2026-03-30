@@ -20,7 +20,11 @@ except Error as e:
 
 cursor = connection.cursor()
 
-
+tierSQL = "SELECT DISTINCT tier FROM games"
+cursor.execute(tierSQL)
+print("The tiers present in the database are: ")
+for i in cursor:
+    print(i)
 
 def userSearch(username):
     sql = "SELECT * FROM players WHERE username = ?"
@@ -42,7 +46,7 @@ def userSearch(username):
 
 
 
-def usageRate(pokemon):
+def usageRate(pokemon, tier):
     sql = "SELECT player1_team, player2_team FROM games"
     cursor.execute(sql)
 
@@ -66,7 +70,8 @@ def usageRate(pokemon):
         print(pokeTotal)
         print(pokeUsed)
 
-
+def topUsageList():
+    pass
         
 ################BUG################
 #When printing pokemon without genders, the last letter gets cut off? Mew != Me
@@ -86,10 +91,15 @@ def Search():
             name = input("Please enter a username: ")
             userSearch(name)
         case "2":
-            print("You entered 2")
-            usageRate("Clodsire")
+            pokemon = input("Please enter a pokemon name: ")
+            tier = input("Please input a tier: ")
+            usageRate(pokemon, tier)
+
         case "3":
             print("You entered 3")
+            tier = input("Please enter a tier: ")
+
+
         case _:
             print("Please input a valid number")
 
