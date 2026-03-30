@@ -81,8 +81,9 @@ def usageRate(pokemon, tier):
 def topUsageList(tier):
     cursor = connection.cursor()
     SQL = "SELECT player1_team, player2_team FROM games WHERE tier = ?"
-    cursor.execute(SQL, str(tier))
-    
+    cursor.execute(SQL, tier)
+    ##################Incorrect number of bindings supplied. The current statement uses 1, and there are 10 supplied.#########################
+    ###############ERROR###########ERROR################ERROR###########ERROR#########ERROR###############
     SQLlist = cursor.fetchall()
     PokeUsage = {} 
     for poketeam in SQLlist:
