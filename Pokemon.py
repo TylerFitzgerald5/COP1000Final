@@ -4,7 +4,7 @@ import Util
 import sqlite3
 from sqlite3 import Error
 
-URL = input("Please input a Pokemon Showdown replay link: ")
+#URL = input("Please input a Pokemon Showdown replay link: ")
 
 
 def connection_create(path):
