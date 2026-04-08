@@ -97,7 +97,7 @@ def matchFind(URL):
 
 
     #Gets rid of pokemon genders and converts pokeName1/2 to only their names
-    print(pokeNames2)
+
     for i in range(len(pokeNames2)):
 
         seperator = pokeNames2[i].find(',')
@@ -106,8 +106,7 @@ def matchFind(URL):
 
         if seperator != -1:
             pokeNames2[i] = pokeNames2[i][0:seperator]
-    print(pokeNames2) 
-    print(pokeNames1)
+
     for i in range(len(pokeNames1)):
         seperator = pokeNames1[i].find(',')
         if seperator == -1:
@@ -115,7 +114,7 @@ def matchFind(URL):
 
         if seperator != -1:
             pokeNames1[i] = pokeNames1[i][0:seperator]
-    print(pokeNames1)  
+
 
 
 
@@ -183,6 +182,8 @@ def matchFind(URL):
         connection.commit()
 
         print("INSERT executed")
+
+
     except Error as e:
         if(str(e) == "UNIQUE constraint failed: games.match_id"):
             print(matchID + ": MATCH ALREADY IN THE DATABASE")

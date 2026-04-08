@@ -5,9 +5,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.support.ui import WebDriverWait  
 from selenium.webdriver.support import expected_conditions as EC  
 from selenium.webdriver.common.by import By  
+import Pokemon
 
 # Initialize Chrome driver instance
-tier = "?format=" + input("Give tier/format")
+tier = input("Give tier/format")
 driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()))
 
 # Navigate to the url
@@ -18,7 +19,7 @@ WebDriverWait(driver, 30).until(
     EC.presence_of_element_located((By.TAG_NAME, "body"))  # Wait for <body> tag  
 )  
 
-driver.get('https://replay.pokemonshowdown.com/' + tier)
+driver.get('https://replay.pokemonshowdown.com/?format=' + tier + "&sort=rating")
 links = []
 releventSiteInfo = ""
 websiteList = driver.page_source.split("\n")
@@ -28,9 +29,9 @@ for i in websiteList:
         print("LINKS PROC")
 
 print("<a href=\"gen9ou")
-print("<a href=\"" + tier[8:])
-substring = "<a href=\"" + tier[8:]
-for i in range(55):
+print("<a href=\"" + tier)
+substring = "<a href=\"" + tier
+while releventSiteInfo.find(substring) != -1:
     #print("THIS LOOP IS RUNNING")
     nextLinkStart = releventSiteInfo.find(substring)
     #print(nextLinkStart)
@@ -39,7 +40,11 @@ for i in range(55):
     link = releventSiteInfo[0:nextLinkStop]
     print(link)
     links.append(link)
-    
+
+
+for i in links:
+    Pokemon.matchFind("https://replay.pokemonshowdown.com/" + i)
+print(len(links))
 
 # Close the driver
 driver.quit()
