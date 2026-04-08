@@ -231,6 +231,6 @@ def matchFind(URL):
 
 
         connection.commit()
-
+        print("\n\n\n")
     except Error as e:
         print(e)
