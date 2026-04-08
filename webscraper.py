@@ -19,18 +19,31 @@ WebDriverWait(driver, 30).until(
 )  
 
 driver.get('https://replay.pokemonshowdown.com/' + tier)
-links = "No links found"
+links = []
+releventSiteInfo = ""
 websiteList = driver.page_source.split("\n")
 for i in websiteList:
     if '<ul class="linklist">' in i:
-        links = i
+        releventSiteInfo = i
         print("LINKS PROC")
 
-print(links)
+print("<a href=\"gen9ou")
+print("<a href=\"" + tier[8:])
+substring = "<a href=\"" + tier[8:]
+for i in range(55):
+    #print("THIS LOOP IS RUNNING")
+    nextLinkStart = releventSiteInfo.find(substring)
+    #print(nextLinkStart)
+    releventSiteInfo = releventSiteInfo[nextLinkStart + 9:] #Brings the start of the next link to the start of the relevent site information (since nothing else is relevent)
+    nextLinkStop = releventSiteInfo.find('"') #Finds the next index of "
+    link = releventSiteInfo[0:nextLinkStop]
+    print(link)
+    links.append(link)
+    
+
 # Close the driver
 driver.quit()
-#tier = "?format=" + input("Give tier/format")
-#website = requests.get("https://replay.pokemonshowdown.com/")
+
 
 
 
